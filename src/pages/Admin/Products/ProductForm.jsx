@@ -3,8 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { motion } from 'framer-motion'
-import { ImagePlus, ArrowLeft, Save } from 'lucide-react'
+import { ImagePlus } from 'lucide-react'
 import api from '../../../services/api.js'
 import { toast } from 'react-toastify'
 
@@ -13,6 +12,20 @@ const schema = yup.object({
   price: yup.number().typeError('Informe o preço').positive('Preço deve ser positivo').required('Preço é obrigatório'),
   category_id: yup.string().required('Selecione uma categoria'),
 })
+
+function Field({ label, error, ...props }) {
+  return (
+    <div className="flex flex-col gap-1">
+      <label className="font-['Poppins'] text-[13px] font-semibold text-gray-700">{label}</label>
+      <input
+        {...props}
+        className="w-full px-4 py-3 rounded-[8px] border font-['Poppins'] text-[14px] outline-none transition-all"
+        style={{ borderColor: error ? '#ef4444' : '#ddd', color: '#333' }}
+      />
+      {error && <p className="text-xs text-red-400 font-semibold">{error}</p>}
+    </div>
+  )
+}
 
 export default function ProductForm() {
   const { id } = useParams()
@@ -36,11 +49,7 @@ export default function ProductForm() {
       api.get('/products').then(({ data }) => {
         const product = (Array.isArray(data) ? data : []).find((p) => String(p.id) === String(id))
         if (product) {
-          reset({
-            name: product.name,
-            price: product.price / 100,
-            category_id: String(product.category_id),
-          })
+          reset({ name: product.name, price: product.price / 100, category_id: String(product.category_id) })
           setOffer(product.offer || false)
           if (product.url_image) setPreview(`http://localhost:3000${product.url_image}`)
         }
@@ -81,143 +90,103 @@ export default function ProductForm() {
   }
 
   return (
-    <div className="p-8 max-w-2xl" style={{ color: 'var(--color-text)' }}>
-      {/* Header */}
-      <div className="flex items-center gap-4 mb-8">
-        <button
-          onClick={() => navigate('/admin/products')}
-          className="flex items-center gap-2 text-sm font-semibold hover:opacity-70 transition-opacity"
-          style={{ color: 'var(--color-text-muted)' }}
-        >
-          <ArrowLeft size={18} /> Voltar
-        </button>
-        <h1 className="text-2xl font-black">{isEdit ? 'Editar Produto' : 'Novo Produto'}</h1>
-      </div>
+    <div className="p-8 max-w-[560px]">
+      {/* Breadcrumb */}
+      <p className="font-['Poppins'] text-[13px] text-gray-500 mb-6">
+        Gerenciar &gt; <span className="font-semibold text-gray-700">{isEdit ? 'Editar Produto' : 'Cadastrar Produto'}</span>
+      </p>
 
-      <motion.form
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        onSubmit={handleSubmit(onSubmit)}
-        className="space-y-5"
-      >
-        {/* Image upload */}
-        <div>
-          <label
-            htmlFor="file-upload"
-            className="flex flex-col items-center justify-center w-full h-48 rounded-2xl border-2 border-dashed cursor-pointer transition-all hover:opacity-80"
-            style={{ borderColor: preview ? 'transparent' : 'var(--color-border)', background: 'var(--color-bg-card)', overflow: 'hidden' }}
-          >
-            {preview ? (
-              <img src={preview} alt="Preview" className="w-full h-full object-cover" />
-            ) : (
-              <div className="flex flex-col items-center gap-2">
-                <ImagePlus size={32} style={{ color: 'var(--color-text-muted)' }} />
-                <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-                  Clique para selecionar a imagem do produto
-                </p>
-              </div>
-            )}
-          </label>
-          <input id="file-upload" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+      <div className="bg-white rounded-[20px] overflow-hidden shadow-sm">
+        {/* Card header */}
+        <div className="px-6 py-4" style={{ backgroundColor: '#2a2a2a' }}>
+          <span className="text-white font-['Poppins'] font-semibold text-[15px]">
+            {isEdit ? 'Editar produto' : 'Adicionar produto'}
+          </span>
         </div>
 
-        {/* Name */}
-        <div>
-          <label className="block text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: 'var(--color-text-muted)' }}>
-            Nome do Produto
-          </label>
-          <input
-            {...register('name')}
+        <form onSubmit={handleSubmit(onSubmit)} className="px-6 py-6 space-y-5">
+          {/* Nome */}
+          <Field
+            label="Nome"
+            type="text"
             placeholder="Ex: Classic Smash Burger"
-            className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
-            style={{
-              background: 'var(--color-bg-card)',
-              border: `1px solid ${errors.name ? '#ef4444' : 'var(--color-border)'}`,
-              color: 'var(--color-text)',
-            }}
+            error={errors.name?.message}
+            {...register('name')}
           />
-          {errors.name && <p className="text-xs mt-1 text-red-400">{errors.name.message}</p>}
-        </div>
 
-        {/* Price */}
-        <div>
-          <label className="block text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: 'var(--color-text-muted)' }}>
-            Preço (R$)
-          </label>
-          <input
-            {...register('price')}
+          {/* Preço */}
+          <Field
+            label="Preço"
             type="number"
             step="0.01"
             placeholder="Ex: 32.90"
-            className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
-            style={{
-              background: 'var(--color-bg-card)',
-              border: `1px solid ${errors.price ? '#ef4444' : 'var(--color-border)'}`,
-              color: 'var(--color-text)',
-            }}
+            error={errors.price?.message}
+            {...register('price')}
           />
-          {errors.price && <p className="text-xs mt-1 text-red-400">{errors.price.message}</p>}
-        </div>
 
-        {/* Category */}
-        <div>
-          <label className="block text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: 'var(--color-text-muted)' }}>
-            Categoria
-          </label>
-          <select
-            {...register('category_id')}
-            className="w-full px-4 py-3 rounded-xl text-sm outline-none cursor-pointer"
-            style={{
-              background: 'var(--color-bg-card)',
-              border: `1px solid ${errors.category_id ? '#ef4444' : 'var(--color-border)'}`,
-              color: 'var(--color-text)',
-            }}
-          >
-            <option value="">Selecione uma categoria</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={String(cat.id)} style={{ background: '#161616' }}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-          {errors.category_id && <p className="text-xs mt-1 text-red-400">{errors.category_id.message}</p>}
-        </div>
-
-        {/* Offer toggle */}
-        <div
-          className="flex items-center justify-between p-4 rounded-xl border"
-          style={{ background: 'var(--color-bg-card)', borderColor: 'var(--color-border)' }}
-        >
-          <div>
-            <p className="text-sm font-semibold">Marcar como Oferta 🔥</p>
-            <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-muted)' }}>
-              O produto aparecerá na seção de ofertas da Home
-            </p>
+          {/* Upload imagem */}
+          <div className="flex flex-col gap-1">
+            <label className="font-['Poppins'] text-[13px] font-semibold text-gray-700">Imagem do produto</label>
+            <label
+              htmlFor="file-upload"
+              className="flex flex-col items-center justify-center w-full h-40 rounded-[8px] border-2 border-dashed cursor-pointer transition-all hover:border-[#9758a6] overflow-hidden"
+              style={{ borderColor: preview ? 'transparent' : '#ddd' }}
+            >
+              {preview ? (
+                <img src={preview} alt="Preview" className="w-full h-full object-contain" />
+              ) : (
+                <div className="flex flex-col items-center gap-2 text-gray-400">
+                  <ImagePlus size={32} />
+                  <p className="font-['Poppins'] text-[13px]">Clique para selecionar</p>
+                </div>
+              )}
+            </label>
+            <input id="file-upload" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
           </div>
-          <button
-            type="button"
-            onClick={() => setOffer((v) => !v)}
-            className="relative w-12 h-6 rounded-full transition-all duration-300"
-            style={{ background: offer ? 'var(--color-primary)' : 'rgba(255,255,255,0.12)' }}
-          >
-            <span
-              className="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-all duration-300"
-              style={{ transform: offer ? 'translateX(24px)' : 'translateX(0)' }}
-            />
-          </button>
-        </div>
 
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-3.5 rounded-full font-black text-white flex items-center justify-center gap-2 transition-all hover:-translate-y-0.5 disabled:opacity-60"
-          style={{ background: 'var(--gradient-primary)', boxShadow: '0 8px 24px rgba(230,57,70,0.35)' }}
-        >
-          <Save size={18} />
-          {loading ? 'Salvando...' : isEdit ? 'Salvar Alterações' : 'Criar Produto'}
-        </button>
-      </motion.form>
+          {/* Categoria */}
+          <div className="flex flex-col gap-1">
+            <label className="font-['Poppins'] text-[13px] font-semibold text-gray-700">Categoria</label>
+            <select
+              {...register('category_id')}
+              className="w-full px-4 py-3 rounded-[8px] border font-['Poppins'] text-[14px] outline-none cursor-pointer"
+              style={{ borderColor: errors.category_id ? '#ef4444' : '#ddd', color: '#333' }}
+            >
+              <option value="">Selecione uma categoria</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={String(cat.id)}>{cat.name}</option>
+              ))}
+            </select>
+            {errors.category_id && <p className="text-xs text-red-400 font-semibold">{errors.category_id.message}</p>}
+          </div>
+
+          {/* Oferta toggle */}
+          <div className="flex items-center justify-between py-2">
+            <span className="font-['Poppins'] text-[13px] font-semibold text-gray-700">Marcar como Oferta</span>
+            <button
+              type="button"
+              onClick={() => setOffer((v) => !v)}
+              className="relative w-11 h-6 rounded-full transition-all duration-300"
+              style={{ backgroundColor: offer ? '#9758a6' : '#ddd' }}
+            >
+              <span
+                className="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-all duration-300"
+                style={{ transform: offer ? 'translateX(20px)' : 'translateX(0)' }}
+              />
+            </button>
+          </div>
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3.5 rounded-[8px] font-['Poppins'] font-bold text-white text-[15px] hover:brightness-110 transition-all disabled:opacity-60"
+            style={{ backgroundColor: '#9758a6' }}
+          >
+            {loading ? 'Salvando...' : isEdit ? 'Salvar alterações' : 'Adicionar produto'}
+          </button>
+        </form>
+      </div>
     </div>
   )
 }
