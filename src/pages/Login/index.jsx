@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
@@ -15,7 +14,7 @@ const schema = yup.object({
 function Field({ label, error, ...props }) {
   return (
     <div className="flex flex-col">
-      <label className="text-sm font-medium mb-2 text-white">{label}</label>
+      <label className="text-sm font-medium mb-2 text-white font-['Poppins']">{label}</label>
       <input
         {...props}
         className="w-full px-4 py-4 rounded-[5px] text-sm outline-none transition-all"
@@ -46,64 +45,78 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex w-full bg-[#1c1c1c]">
-      {/* Left Column - Image Background */}
-      <div 
-        className="hidden lg:flex w-[55%] relative items-center justify-center bg-cover bg-center bg-no-repeat"
+    <div className="min-h-screen flex w-full">
+      {/* Left Column — grunge photo + logo */}
+      <div
+        className="hidden lg:flex w-1/2 relative items-center justify-center bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url('/assets/login/bg1.png')` }}
       >
-        <div className="absolute inset-0 bg-black/30"></div>
-        <img 
-          src="/assets/login/logo2.svg" 
-          alt="DevBurguer Logo" 
-          className="relative z-10 w-[60%] max-w-[400px] drop-shadow-2xl"
+        <div className="absolute inset-0 bg-black/20" />
+        <img
+          src="/assets/login/logo2.svg"
+          alt="DevBurguer Logo"
+          className="relative z-10 w-[55%] max-w-[380px] drop-shadow-2xl"
         />
       </div>
 
-      {/* Right Column - Form */}
-      <div 
-        className="w-full lg:w-[45%] flex flex-col items-center justify-center px-8 sm:px-16 py-12 relative overflow-hidden"
+      {/* Right Column — dark + repeating icon pattern */}
+      <div
+        className="w-full lg:w-1/2 flex flex-col items-center justify-center px-8 sm:px-16 py-12 relative overflow-hidden"
+        style={{ backgroundColor: '#2a2a2a' }}
       >
-        {/* Texture Background */}
-        <div 
-          className="absolute inset-0 z-0 opacity-40 mix-blend-overlay"
-          style={{ 
-            backgroundImage: `url('/assets/login/Padrão 1.jpg')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
+        {/* Repeating icon pattern overlay */}
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: `url('/assets/login/Padrão 2.png')`,
+            backgroundSize: '220px',
+            backgroundRepeat: 'repeat',
+            opacity: 0.12,
           }}
-        ></div>
+        />
 
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
-          className="w-full max-w-[400px] relative z-10"
+          className="w-full max-w-[420px] relative z-10"
         >
-          {/* Mobile Logo fallback */}
+          {/* Mobile logo */}
           <div className="flex lg:hidden justify-center mb-10">
             <img src="/assets/login/logo2.svg" alt="DevBurguer Logo" className="w-[200px]" />
           </div>
 
+          {/* Heading */}
           <div className="text-center mb-10">
-            <h1 className="text-white text-xl sm:text-2xl font-bold mb-1" style={{ fontFamily: 'var(--font-family-sans)' }}>
-              Olá, seja bem vindo ao <span style={{ color: '#9758a6' }}>Dev Burguer!</span>
+            <h1 className="text-white text-2xl font-bold font-['Poppins'] leading-snug">
+              Olá, seja bem vindo ao{' '}
+              <span style={{ color: '#9758a6' }}>Dev Burguer!</span>
             </h1>
-            <p className="text-white text-xl sm:text-2xl font-bold" style={{ fontFamily: 'var(--font-family-sans)' }}>
-              Acesse com seu <span style={{ color: '#9758a6' }}>Login</span> e senha.
+            <p className="text-white text-2xl font-bold font-['Poppins'] leading-snug mt-1">
+              Acesse com seu{' '}
+              <span style={{ color: '#9758a6' }}>Login e senha.</span>
             </p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 relative">
-            
-            {/* Cart Icon */}
-            <div className="absolute -top-12 right-0">
-              <svg xmlns="http://www.w3.org/-2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="9" cy="21" r="1"></circle>
-                <circle cx="20" cy="21" r="1"></circle>
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                <path d="M11 10h6"></path>
-                <path d="M14 7v6"></path>
+            {/* Cart icon — top right */}
+            <div className="absolute -top-14 right-0">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="36"
+                height="36"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                <line x1="12" y1="9" x2="12" y2="15" />
+                <line x1="9" y1="12" x2="15" y2="12" />
               </svg>
             </div>
 
@@ -113,7 +126,7 @@ export default function Login() {
               error={errors.email?.message}
               {...register('email')}
             />
-            
+
             <Field
               label="Senha"
               type="password"
@@ -124,15 +137,15 @@ export default function Login() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-4 text-white text-[16px] font-bold mt-6 transition-all hover:opacity-80 disabled:opacity-60"
+              className="w-full py-4 text-white text-[15px] font-bold tracking-[3px] uppercase transition-all hover:opacity-80 disabled:opacity-60 font-['Poppins'] mt-4"
             >
               {isSubmitting ? 'ENTRANDO...' : 'ENTRAR'}
             </button>
           </form>
 
-          <p className="text-center text-white mt-12 text-sm font-semibold">
+          <p className="text-center text-white mt-10 text-sm font-['Poppins']">
             Não possui conta?{' '}
-            <Link to="/register" className="underline hover:text-gray-300 transition-colors">
+            <Link to="/register" className="underline font-bold hover:text-gray-300 transition-colors">
               Clique aqui.
             </Link>
           </p>
