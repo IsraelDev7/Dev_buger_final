@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Road+Rage&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #e63946;
+  --color-primary-dark: #c1121f;
+  --color-primary-glow: rgba(230, 57, 70, 0.35);
+  --color-secondary: #f4a261;
+  --color-bg: #0d0d0d;
+  --color-bg-card: #161616;
+  --color-bg-glass: rgba(22, 22, 22, 0.75);
+  --color-nav: rgba(10, 10, 10, 0.85);
+  --color-text: #f0f0f0;
+  --color-text-muted: #888888;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.15);
+  --color-hover: rgba(255, 255, 255, 0.05);
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.5);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.6);
+  --shadow-lg: 0 24px 64px rgba(0,0,0,0.8);
+  --shadow-glow: 0 0 40px rgba(230, 57, 70, 0.25);
+
+  --gradient-primary: linear-gradient(135deg, #e63946 0%, #c1121f 100%);
+  --gradient-hero: linear-gradient(135deg, rgba(13,13,13,0.97) 0%, rgba(13,13,13,0.7) 60%, rgba(230,57,70,0.1) 100%);
+
+  --font-family-sans: 'Poppins', system-ui, -apple-system, sans-serif;
+  --font-family-display: 'Road Rage', cursive;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-family-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+input, textarea, select {
+  font-family: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+
+/* Toast override */
+.Toastify__toast { background: #1e1e1e !important; color: #f0f0f0 !important; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 12px !important; }
+.Toastify__progress-bar { background: var(--color-primary) !important; }
