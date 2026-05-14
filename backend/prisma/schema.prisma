@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./devburguer.db"
+}
+
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  password_hash String
+  admin         Boolean  @default(false)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  Order         Order[]
+}
+
+model Category {
+  id         Int       @id @default(autoincrement())
+  name       String
+  path       String
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  Product    Product[]
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float
+  rating      Int      @default(5)
+  category_id Int
+  category    Category @relation(fields: [category_id], references: [id])
+  path        String
+  offer       Boolean  @default(false)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+model Order {
+  id         String   @id @default(uuid())
+  user       User     @relation(fields: [user_id], references: [id])
+  user_id    String
+  products   String   // Stores JSON string of products
+  status     String   @default("Pedido realizado")
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}

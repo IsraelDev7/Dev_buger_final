@@ -1,0 +1,1296 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Road+Rage&display=swap');
+@import url('https://fonts.cdnfonts.com/css/bear-days');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #e63946;
+  --color-primary-dark: #c1121f;
+  --color-primary-glow: rgba(230, 57, 70, 0.35);
+  --color-secondary: #f4a261;
+  --color-bg: #0d0d0d;
+  --color-bg-card: #161616;
+  --color-bg-glass: rgba(22, 22, 22, 0.75);
+  --color-nav: rgba(10, 10, 10, 0.85);
+  --color-text: #f0f0f0;
+  --color-text-muted: #888888;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.15);
+  --color-hover: rgba(255, 255, 255, 0.05);
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.5);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.6);
+  --shadow-lg: 0 24px 64px rgba(0,0,0,0.8);
+  --shadow-glow: 0 0 40px rgba(230, 57, 70, 0.25);
+
+  --gradient-primary: linear-gradient(135deg, #e63946 0%, #c1121f 100%);
+  --gradient-hero: linear-gradient(135deg, rgba(13,13,13,0.97) 0%, rgba(13,13,13,0.7) 60%, rgba(230,57,70,0.1) 100%);
+
+  --font-family-sans: 'Poppins', system-ui, -apple-system, sans-serif;
+  --font-family-display: 'Road Rage', cursive;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-family-sans);
+  background-color: #efefef;
+  color: var(--color-text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+input:focus, textarea:focus {
+  border-color: #9758a6 !important;
+  box-shadow: 0 0 0 3px rgba(151, 88, 166, 0.2) !important;
+  caret-color: #9758a6; /* Garante que o indicador piscante seja visível e roxo */
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+
+/* Background Pattern conforme HOME_CARROSSEL.jpg */
+.main-wrapper {
+    background-color: #efefef;
+    min-height: 100vh;
+}
+
+.main-content {
+    background-color: #efefef;
+    background-image: url('/assets/login/Padrão 2.png'); /* Ícones de programação cinza claro */
+    background-repeat: repeat;
+    background-size: 400px;
+    padding: 60px 0 50px 0 !important; /* Espaçamento reduzido conforme pedido */
+}
+
+.section-container {
+    max-width: 1100px; /* Largura controlada conforme a imagem de referência */
+    margin: 0 auto;    /* Centraliza o bloco na tela */
+    padding: 0 40px;   /* Cria a margem interna para as setas não colarem no card */
+}
+
+/* Ajuste do Header */
+.header-container {
+    background-color: #1f1f1f;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 60px !important; /* 60px afasta a logo da margem */
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+    color: white;
+}
+
+.nav-divider {
+    color: #444; /* A risca vertical | entre Home e Contatos */
+}
+
+/* Hero Section */
+.hero-banner {
+    width: 100%;
+    height: 480px !important;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Retornado para a direita conforme pedido */
+    padding-right: 12%;
+    position: relative;
+    overflow: hidden;
+    background-color: #1c1c1c;
+}
+
+.hero-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.hero-overlay {
+    position: relative !important;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: none !important;
+}
+
+.hero-text-container {
+    text-align: center;
+    color: white;
+    max-width: 500px;
+}
+
+.hero-text-container h1 {
+    font-family: 'Road Rage', cursive;
+    font-size: 5.5rem;
+    line-height: 0.9;
+    text-transform: uppercase;
+    text-shadow: 2px 4px 10px rgba(0,0,0,0.5);
+}
+
+.hero-text-container p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    margin-top: 10px;
+    text-shadow: 1px 2px 5px rgba(0,0,0,0.3);
+}
+
+.welcome-text {
+    color: white;
+    font-size: 6rem;
+    font-family: 'Road Rage', cursive;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+    line-height: 1;
+}
+
+/* Card de Categoria (Estilo com Gradiente) */
+.category-card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 250px;
+}
+
+.category-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+    padding: 20px;
+    color: white;
+    text-align: left;
+}
+
+/* Card de Ofertas (Efeito de imagem saindo para fora) */
+.offer-card {
+    background: white;
+    border-radius: 25px;
+    margin-top: 50px; /* Espaço para a imagem flutuar */
+    padding: 60px 20px 20px;
+    position: relative;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.05);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.offer-image {
+    position: absolute;
+    top: -50px; /* Faz a comida sair do card */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 130px;
+    height: 100px;
+    object-contain: contain;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+}
+
+.buy-button {
+    background-color: #9758a6; /* Roxo exato da imagem */
+    color: white !important;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    width: 100%;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto;
+}
+
+/* Swiper arrow colors */
+.swiper-button-next, .swiper-button-prev {
+    color: #9758a6 !important;
+}
+
+/* Títulos com o "Tracinho" */
+.section-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 40px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #9758a6; /* Roxo para Categorias */
+    font-family: 'Poppins';
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.section-title::after {
+    content: "";
+    width: 50px;
+    height: 3px;
+    background-color: currentColor; /* Usa a cor do texto (roxo ou verde) */
+    margin-top: 8px;
+    border-radius: 2px;
+}
+
+/* Se for a de ofertas, mude a cor para verde */
+.offers-title {
+    color: #5bb333; /* Verde para ofertas */
+}
+
+/* Toast override */
+.Toastify__toast { background: #1e1e1e !important; color: #f0f0f0 !important; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 12px !important; }
+.Toastify__progress-bar { background: var(--color-primary) !important; }
+
+/* --- Menu Page Styles --- */
+.categories-menu {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 50px;
+    flex-wrap: wrap;
+}
+
+.category-button {
+    background: none;
+    border: none;
+    font-family: 'Bear Days', sans-serif;
+    font-size: 26px;
+    color: #9758A6;
+    cursor: pointer;
+    padding-bottom: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15); /* Efeito flutuante suave */
+}
+
+.category-button.active {
+    font-weight: bold;
+    border-bottom: 3px solid #9758A6;
+    text-shadow: 0px 6px 8px rgba(0, 0, 0, 0.25); /* Sombra mais profunda para indicar destaque */
+}
+
+.category-button:hover {
+    transform: translateY(-5px);
+    text-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.product-card {
+    background: #FFFFFF;
+    border-radius: 20px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: all 0.3s ease;
+    margin-top: 40px;
+    height: 100%;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.favorite-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: #9758A6;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.image-container {
+    width: 100%;
+    height: 160px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -80px; /* Aumentado para o efeito flutuante */
+}
+
+.product-image {
+    width: 200px;
+    height: 180px;
+    object-fit: contain;
+    /* O drop-shadow é o que faz a mágica da flutuação */
+    filter: drop-shadow(0 20px 10px rgba(0, 0, 0, 0.3)); 
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.1) translateY(-10px); /* Ela sobe mais um pouco no hover */
+}
+
+.product-info {
+    margin-top: 15px;
+    text-align: left;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.product-title {
+    color: #f7941d;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.product-description {
+    color: #666;
+    font-size: 0.85rem;
+    line-height: 1.3;
+    min-height: 60px;
+    margin-bottom: 15px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.product-footer {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    width: 100%;
+}
+
+.product-price {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #333;
+    margin-bottom: 10px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.rating-stars {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 5px;
+}
+
+/* ── Checkout & Cart Refined Styles ── */
+
+.checkout-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 350px; /* Coluna da direita fixa em 350px */
+    gap: 30px;
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+@media (max-width: 1024px) {
+    .checkout-wrapper {
+        grid-template-columns: 1fr;
+    }
+}
+
+.checkout-card {
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    height: fit-content;
+}
+
+.card-header {
+    background-color: #333333;
+    color: white;
+    padding: 15px 25px;
+    text-align: center;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.card-body {
+    padding: 25px;
+}
+
+/* Cart Items Table Style */
+.cart-items-header {
+    display: grid;
+    grid-template-columns: 100px 2fr 1fr 1fr 1fr;
+    padding: 15px 25px;
+    background-color: #333333;
+    color: white;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.cart-item {
+    display: grid;
+    grid-template-columns: 100px 2fr 1fr 1fr 1fr; 
+    align-items: center;
+    gap: 15px;
+    padding: 15px 25px;
+    border-bottom: 1px solid #eeeeee;
+    text-align: center;
+}
+
+.cart-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    background: #f9f9f9;
+    border-radius: 10px;
+}
+
+.cart-item-name {
+    text-align: left;
+    font-weight: bold;
+    color: #333;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-quantity {
+    background-color: #9758a6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-quantity:hover {
+    transform: scale(1.1);
+    brightness: 1.1;
+}
+
+/* Summary Styles */
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    color: #666;
+    font-family: 'Poppins', sans-serif;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #333;
+    font-family: 'Poppins', sans-serif;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.btn-finalize {
+    background-color: #9758a6;
+    color: white;
+    width: 100%;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 5px 15px rgba(151, 88, 166, 0.3);
+}
+
+.btn-finalize:hover {
+    background-color: #7d488a;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(151, 88, 166, 0.4);
+}
+
+.link-back {
+    display: block;
+    margin-top: 30px;
+    text-align: center;
+    color: #9758a6;
+    font-weight: bold;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+}
+
+.link-back:hover {
+    text-decoration: underline;
+}
+
+.input-field {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fcfcfc;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+    color: #222; /* Cinza mais escuro e legível */
+    font-weight: 500;
+}
+
+.input-field::placeholder {
+    color: #666;
+}
+
+.input-field:focus {
+    border-color: #9758a6;
+}
+
+.radio-label {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+/* Estilização do Pix conforme a imagem */
+.pix-area {
+    display: flex;
+    justify-content: center;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+}
+
+.pix-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.pix-key {
+    display: block;
+    background: #eee;
+    padding: 5px;
+    font-size: 0.7rem;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 10px;
+}
+
+.btn-copy {
+    background: #9758a6;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-copy:hover {
+    opacity: 0.8;
+}
+
+.card-form-animation h4 {
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.btn-save {
+    background: #9758a6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.main-wrapper-checkout {
+    background-color: #efefef;
+    background-image: url('/assets/login/Padrão 2.png');
+    background-repeat: repeat;
+    background-size: 400px;
+    min-height: 100vh;
+}
+
+/* --- Admin Panel Styles --- */
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #333; /* Fundo escuro lateral */
+}
+
+.admin-sidebar {
+    width: 260px;
+    background-color: #3C3C3C;
+    display: flex;
+    flex-direction: column;
+    padding-top: 30px;
+    height: 100vh;
+    position: fixed; /* Mantém a barra fixa */
+    left: 0;
+    top: 0;
+    z-index: 100;
+}
+
+.admin-content {
+    flex: 1;
+    margin-left: 260px; /* Offset para a sidebar fixa */
+    background-color: #EFEFEF;
+    padding: 40px;
+    background-image: url('/assets/login/Padrão 2.png');
+    background-repeat: repeat;
+    background-size: 400px;
+    min-height: 100vh;
+}
+
+.sidebar-logo {
+    width: 60px;
+    align-self: center;
+    margin-bottom: 40px;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 25px;
+    color: #ffffff;
+    text-decoration: none !important;
+    font-size: 16px;
+    transition: background 0.3s;
+    border-bottom: 1px solid #4a4a4a; /* Linha sutil entre itens */
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.sidebar-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-item.active {
+    background-color: #9758a6; /* Roxo quando selecionado */
+}
+
+.admin-link {
+    color: #9758a6 !important;
+    font-weight: bold;
+}
+
+.admin-card-list {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    overflow-x: auto; /* Garante que não quebre em telas menores */
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-family: 'Poppins', sans-serif;
+}
+
+.admin-table th {
+    padding: 18px 15px;
+    border-bottom: 2px solid #f0f0f0;
+    color: #333;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+.admin-table td {
+    padding: 18px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #555;
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+.admin-table tr:hover td {
+    background-color: rgba(151, 88, 166, 0.02);
+}
+
+.table-img {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+/* Estilo para os botões de ação */
+.action-btn {
+    border: none;
+    background: #f5f5f5;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-edit:hover { 
+    background-color: #efefef;
+    transform: translateY(-2px);
+}
+
+.btn-delete:hover { 
+    background-color: #ffcccc; 
+    color: #ff4444;
+    transform: translateY(-2px);
+}
+
+.btn-finalize-admin {
+    background-color: #9758a6;
+    color: white;
+    border-radius: 12px;
+    padding: 12px 25px;
+    font-weight: bold;
+    font-family: 'Poppins';
+    box-shadow: 0 8px 20px rgba(151, 88, 166, 0.3);
+    transition: 0.3s;
+}
+
+.btn-finalize-admin:hover {
+    filter: brightness(1.1);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(151, 88, 166, 0.4);
+}
+
+.admin-form-card {
+    background: white;
+    padding: 40px;
+    border-radius: 25px;
+    max-width: 550px;
+    margin: 0 auto;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+}
+
+.admin-input {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+}
+
+.admin-input:focus {
+    border-color: #9758a6;
+}
+
+.upload-area {
+    border: 2px dashed #9758a6;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    margin: 20px 0;
+    color: #9758a6;
+    border-radius: 12px;
+    background: rgba(151, 88, 166, 0.02);
+    transition: all 0.3s;
+    font-weight: 600;
+}
+
+.upload-area:hover {
+    background: rgba(151, 88, 166, 0.05);
+}
+
+.admin-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.add-to-cart-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: #9758A6;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    color: white;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #7d488a;
+}
+
+/* ── Admin Orders Page ── */
+.admin-tab {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #888;
+    background: transparent;
+    border: none;
+    padding: 8px 0;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    border-bottom: 2px solid transparent;
+}
+
+.admin-tab.active {
+    color: #333;
+    font-weight: bold;
+    border-bottom: 2px solid #ef7d00; /* Laranja da imagem */
+}
+
+/* No CSS antigo as tabs tinham borda redonda, vamos ajustar para o estilo da imagem */
+.admin-tab {
+    padding: 10px 30px;
+    border-radius: 30px;
+    border: 1px solid transparent;
+}
+
+.admin-tab.active {
+    border: 1.5px solid #ef7d00;
+    border-bottom: 1.5px solid #ef7d00;
+    color: #333;
+}
+
+.order-table-header {
+    background-color: #333333;
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
+    padding: 18px 30px;
+    align-items: center;
+}
+
+.header-label {
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.sort-arrows {
+    opacity: 0.5;
+    margin-left: 5px;
+    font-size: 14px;
+}
+
+.order-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
+    padding: 18px 30px;
+    align-items: center;
+    background-color: #f5f5f5;
+    border-bottom: 2px solid #ffffff;
+    transition: background 0.2s;
+}
+
+.order-row:hover {
+    background-color: #eeeeee;
+}
+
+.order-id {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #444;
+    font-weight: 500;
+}
+
+.customer-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #444;
+}
+
+/* Custom Select Styling */
+.custom-select-wrapper {
+    position: relative;
+    width: 170px;
+}
+
+.admin-status-select {
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    background: white;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    padding: 8px 15px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: #666;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.admin-status-select:focus {
+    border-color: #9758a6;
+}
+
+.select-arrow {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #333;
+    font-size: 12px;
+}
+
+.admin-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #9758a6;
+    border-radius: 4px;
+}
+
+.admin-footer {
+    background-color: #5c2367; /* Roxo escuro do rodapé */
+    color: white;
+    text-align: center;
+    padding: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 200;
+}
+
+/* ── Authentication Pages (Login/Register) ── */
+.auth-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ... (existing auth styles) ... */
+
+/* ── Home Page Carousel & Titles ── */
+.carousel-wrapper {
+    max-width: 1280px; 
+    margin: 0 auto;
+    position: relative;
+    padding: 0 60px; /* Cria espaço para as setas */
+}
+
+/* Sobrescrevendo o Swiper para afastar as setas e pintar de roxo */
+.my-offers-swiper .swiper-button-prev,
+.my-offers-swiper .swiper-button-next {
+    color: #9758a6 !important; /* Roxo Dev Burger */
+    background: transparent;
+    transition: all 0.3s;
+}
+
+.my-offers-swiper .swiper-button-prev:hover,
+.my-offers-swiper .swiper-button-next:hover {
+    transform: scale(1.2);
+}
+
+.my-offers-swiper .swiper-button-prev {
+    left: 0 !important;
+}
+
+.my-offers-swiper .swiper-button-next {
+    right: 0 !important;
+}
+
+/* Título verde estilizado */
+.offers-title {
+    color: #5bb333;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 50px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.offers-title::after {
+    content: "";
+    width: 50px;
+    height: 4px;
+    background-color: #5bb333;
+    margin-top: 8px;
+    border-radius: 2px;
+}
+
+.hero-auth-image {
+    background-image: url('/assets/login/bg1.png');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-form-column {
+    background-color: #2a2a2a; /* Fundo escuro conforme imagens */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-pattern-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: url('/assets/login/Padrão 2.png');
+    background-size: 220px;
+    background-repeat: repeat;
+    opacity: 0.12;
+    z-index: 0;
+}
+
+.auth-form-container {
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    z-index: 10;
+}
+
+/* ── 3D Logo Animation ── */
+.auth-logo-wrapper {
+    perspective: 1000px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.auth-logo {
+    width: 280px; /* Ajustado para preencher bem a hero */
+    position: relative;
+    z-index: 10;
+    transform-style: preserve-3d;
+    animation: logo-out-and-wobble 5s ease-in-out infinite;
+}
+
+@keyframes logo-out-and-wobble {
+    0%, 100% {
+        transform: translateZ(0px) rotateY(0deg) rotateX(0deg);
+        filter: drop-shadow(0 0 0 rgba(0, 0, 0, 0));
+    }
+    50% {
+        transform: translateZ(100px) rotateY(15deg) rotateX(5deg);
+        filter: drop-shadow(-30px 40px 25px rgba(0, 0, 0, 0.5));
+    }
+}
+
+/* ── Auth Inputs and Buttons ── */
+.auth-input-group {
+    position: relative;
+    margin-bottom: 18px;
+    text-align: left;
+}
+
+.auth-label {
+    display: block;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    margin-left: 5px;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 15px 25px;
+    background-color: white;
+    border: 2px solid transparent;
+    border-radius: 30px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    transition: all 0.3s;
+    color: #333;
+}
+
+.input-icon-wrapper {
+    position: absolute;
+    right: 20px;
+    top: 42px; /* Ajuste dependendo da label */
+    color: #9758a6;
+    opacity: 0.7;
+}
+
+.btn-auth {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 30px;
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.btn-auth:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+    filter: brightness(1.1);
+}
+
+.btn-auth:active {
+    transform: translateY(0);
+}
+
+/* === Diferenciação Login (Roxo) === */
+.login-form .auth-input:focus {
+    border-color: #9758a6;
+}
+
+.login-form .btn-auth {
+    background-color: #9758a6;
+}
+
+/* === Diferenciação Cadastro (Verde) === */
+.register-form .auth-input:focus {
+    border-color: #5bb333;
+}
+
+.register-form .btn-auth {
+    background-color: #5bb333;
+}
+
+.auth-link-text {
+    text-align: center;
+    color: white;
+    margin-top: 30px;
+    font-size: 14px;
+}
+
+.auth-link {
+    font-weight: bold;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.auth-link:hover {
+    color: #cccccc;
+}
+
+/* Cart Icon in Header form */
+.auth-cart-icon {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    color: white;
+}
