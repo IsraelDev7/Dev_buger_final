@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "public": false,
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://sua-api-backend.com/$1"
+    },
+    {
+      "source": "/product-file/(.*)",
+      "destination": "https://sua-api-backend.com/product-file/$1"
+    },
+    {
+      "source": "/category-file/(.*)",
+      "destination": "https://sua-api-backend.com/category-file/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/frontend/$1"
+    }
+  ]
+}
