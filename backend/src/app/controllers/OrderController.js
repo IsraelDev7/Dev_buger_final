@@ -55,11 +55,54 @@ class OrderController {
 
   async index(request, response) {
     const orders = await prisma.order.findMany({
-      include: { user: { select: { id: true, name: true, email: true } } },
-      orderBy: { created_at: 'desc' },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
     });
 
-    return response.json(orders);
+    // Enriquecer os pedidos com os detalhes dos produtos
+    const formattedOrders = await Promise.all(
+      orders.map(async (order) => {
+        const productsArray = JSON.parse(order.products);
+        
+        const enrichedProducts = await Promise.all(
+          productsArray.map(async (product) => {
+            const productDetails = await prisma.product.findFirst({
+              where: { id: product.id },
+              include: { category: true },
+            });
+
+            return {
+              id: product.id,
+              quantity: product.quantity,
+              name: productDetails?.name || 'Produto removido',
+              category: productDetails?.category?.name || 'Sem categoria',
+              url: productDetails?.path ? `http://localhost:3001/product-file/${productDetails.path}` : '',
+              price: productDetails?.price || 0,
+            };
+          })
+        );
+
+        return {
+          id: order.id,
+          clientName: order.user?.name || 'Cliente',
+          status: order.status,
+          createdAt: order.created_at,
+          products: enrichedProducts,
+        };
+      })
+    );
+
+    return response.json(formattedOrders);
   }
 }
 

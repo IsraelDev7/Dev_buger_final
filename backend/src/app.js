@@ -29,6 +29,11 @@ class App {
 
   routes() {
     this.app.use(routes);
+    this.app.use((err, req, res, next) => {
+      console.error('--- Global Error Handler ---');
+      console.error(err);
+      return res.status(500).json({ error: 'Internal server error', message: err.message });
+    });
   }
 }
 

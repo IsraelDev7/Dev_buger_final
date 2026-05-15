@@ -19,14 +19,14 @@ export default function AdminLayout() {
   return (
     <div className="admin-container">
       {/* Sidebar */}
-      <aside className="admin-sidebar">
+      <aside className="admin-sidebar flex flex-col h-screen">
         {/* Logo Area */}
         <div className="flex justify-center mb-10 pt-4">
           <img src="/assets/login/logo2.svg" alt="DevBurguer" className="w-[120px]" />
         </div>
 
         {/* Nav Links */}
-        <nav className="flex-1 flex flex-col">
+        <nav className="flex-1 flex flex-col gap-2">
           <NavLink
             to="/admin/orders"
             className={({ isActive }) => `sidebar-item ${isActive ? 'active' : ''}`}
@@ -54,11 +54,11 @@ export default function AdminLayout() {
           </NavLink>
         </nav>
 
-        {/* Sair Footer */}
+        {/* Sair Footer - mt-auto pushes this to the bottom */}
         <div className="mt-auto border-t border-[#4a4a4a]">
           <button
             onClick={handleLogout}
-            className="sidebar-item w-full hover:bg-white/5"
+            className="sidebar-item w-full hover:bg-white/5 flex items-center gap-3 py-4"
           >
             <LogOut size={20} className="opacity-80" />
             Sair

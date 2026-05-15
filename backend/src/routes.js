@@ -6,10 +6,14 @@ import SessionController from './app/controllers/SessionController.js';
 import ProductController from './app/controllers/ProductController.js';
 import CategoryController from './app/controllers/CategoryController.js';
 import OrderController from './app/controllers/OrderController.js';
+import StripeController from './app/controllers/StripeController.js';
 import authMiddleware from './app/middlewares/auth.js';
 
 const upload = multer(multerConfig);
 const routes = new Router();
+
+// Health check
+routes.get('/health', (req, res) => res.json({ status: 'ok', time: new Date() }));
 
 // Public routes
 routes.post('/users', UserController.store);
@@ -29,5 +33,7 @@ routes.post('/categories', upload.single('file'), CategoryController.store);
 routes.post('/orders', OrderController.store);
 routes.get('/orders', OrderController.index);
 routes.put('/orders/:id', OrderController.update);
+
+routes.post('/create-payment-intent', StripeController.store);
 
 export default routes;

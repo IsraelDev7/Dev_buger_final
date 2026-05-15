@@ -87,17 +87,21 @@ class ProductController {
   }
 
   async index(request, response) {
-    const products = await prisma.product.findMany({
-      include: { category: true },
-      orderBy: { created_at: 'desc' },
-    });
+    try {
+      const products = await prisma.product.findMany({
+        include: { category: true },
+        orderBy: { created_at: 'desc' },
+      });
 
-    const formattedProducts = products.map((product) => ({
-      ...product,
-      url_image: product.path ? `/product-file/${product.path}` : null,
-    }));
+      const formattedProducts = products.map((product) => ({
+        ...product,
+        url_image: product.path ? `/api/product-file/${product.path}` : null,
+      }));
 
-    return response.json(formattedProducts);
+      return response.json(formattedProducts);
+    } catch (error) {
+      return response.status(500).json({ error: 'Failed to load products', message: error.message });
+    }
   }
 }
 

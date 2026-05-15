@@ -187,7 +187,7 @@ export default function Menu() {
             </button>
             {categories
               .sort((a, b) => {
-                const order = ['Bebidas', 'Entradas', 'Hambúrgueres', 'Sobremesas'];
+                const order = ['Hambúrgueres', 'Entradas', 'Bebidas', 'Sobremesas'];
                 return order.indexOf(a.name) - order.indexOf(b.name);
               })
               .map((cat) => (

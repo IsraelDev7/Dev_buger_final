@@ -5,6 +5,7 @@ import { useCart } from '../../hooks/CartContext.jsx'
 import { useAuth } from '../../hooks/AuthContext.jsx'
 import api from '../../services/api.js'
 import { toast } from 'react-toastify'
+import { StripeContainer } from '../../components/Stripe/StripeContainer.jsx'
 
 const PAYMENT_OPTIONS = [
   { id: 'dinheiro', label: 'Dinheiro' },
@@ -210,12 +211,15 @@ export default function Checkout() {
                         exit={{ opacity: 0, height: 0 }}
                         className="card-form-animation overflow-hidden"
                       >
-                        <h4>Dados do Cartão</h4>
-                        <input type="text" className="input-field" placeholder="Número do Cartão" />
-                        <div style={{ display: 'flex', gap: '10px' }}>
-                          <input type="text" className="input-field" placeholder="MM/AA" />
-                          <input type="text" className="input-field" placeholder="CVC" />
-                        </div>
+                        <h4 className="font-bold text-[16px] mb-4 text-gray-700">Pagamento com Cartão (Stripe)</h4>
+                        <StripeContainer 
+                          totalAmount={grandTotal} 
+                          orderData={{
+                            products: items.map((i) => ({ id: i.id, quantity: i.qty })),
+                            paymentMethod: 'cartao',
+                            address: `${addressData.rua}, ${addressData.bairro}, ${addressData.cidade}`
+                          }}
+                        />
                       </motion.div>
                     )}
 
@@ -275,19 +279,21 @@ export default function Checkout() {
                   <span style={{ color: '#9758a6' }}>R$ {(grandTotal / 100).toFixed(2).replace('.', ',')}</span>
                 </div>
 
-                <div className="text-center mt-6">
-                   <Link to="/cart" className="font-bold text-[14px] hover:underline" style={{ color: '#9758a6' }}>
-                     Rever meu pedido
-                   </Link>
-                </div>
+                 <div className="text-center mt-6">
+                    <Link to="/cart" className="font-bold text-[14px] hover:underline" style={{ color: '#9758a6' }}>
+                      Rever meu pedido
+                    </Link>
+                 </div>
 
-                <button
-                  onClick={handleOrder}
-                  disabled={loading}
-                  className="btn-finalize"
-                >
-                  {loading ? 'Processando...' : 'Finalizar pedido'}
-                </button>
+                {payment !== 'cartao' && (
+                  <button
+                    onClick={handleOrder}
+                    disabled={loading}
+                    className="btn-finalize"
+                  >
+                    {loading ? 'Processando...' : 'Finalizar pedido'}
+                  </button>
+                )}
               </div>
             </aside>
           </div>

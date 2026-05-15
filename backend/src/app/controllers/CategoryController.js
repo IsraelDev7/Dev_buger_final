@@ -34,16 +34,20 @@ class CategoryController {
   }
 
   async index(request, response) {
-    const categories = await prisma.category.findMany({
-      orderBy: { name: 'asc' },
-    });
+    try {
+      const categories = await prisma.category.findMany({
+        orderBy: { name: 'asc' },
+      });
 
-    const formattedCategories = categories.map((category) => ({
-      ...category,
-      url_image: category.path ? `/category-file/${category.path}` : null,
-    }));
+      const formattedCategories = categories.map((category) => ({
+        ...category,
+        url_image: category.path ? `/api/category-file/${category.path}` : null,
+      }));
 
-    return response.json(formattedCategories);
+      return response.json(formattedCategories);
+    } catch (error) {
+      return response.status(500).json({ error: 'Failed to load categories', message: error.message });
+    }
   }
 }
 

@@ -1,31 +1,29 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import api from '../../../services/api.js'
 import { toast } from 'react-toastify'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 
 const STATUS_OPTIONS = [
+  { value: 'Todos', label: 'Todos' },
+  { value: 'Pedido realizado', label: 'Pedido realizado' },
   { value: 'Em preparação', label: 'Em preparação' },
-  { value: 'Pronto', label: 'Pronto' },
-  { value: 'A Caminho', label: 'A Caminho' },
-  { value: 'Entregue', label: 'Entregue' },
-]
-
-const TABS = [
-  { id: 'all', label: 'Todos' },
-  { id: 'Em preparação', label: 'Em preparo' },
-  { id: 'Entregue', label: 'Entregues' },
+  { value: 'Pedido pronto', label: 'Pedido pronto' },
+  { value: 'Pedido à caminho', label: 'Pedido à caminho' },
+  { value: 'Entregue', label: 'Entregue' }
 ]
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState([])
+  const [activeStatus, setActiveStatus] = useState('Todos')
+  const [expandedRows, setExpandedRows] = useState([])
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState('all')
-  const [selected, setSelected] = useState([])
 
-  async function loadOrders() {
+  async function fetchOrders() {
     try {
       const { data } = await api.get('/orders')
-      setOrders(Array.isArray(data) ? data : [])
-    } catch {
+      setOrders(data)
+    } catch (error) {
+      console.error('Erro ao buscar pedidos', error)
       toast.error('Erro ao carregar pedidos')
     } finally {
       setLoading(false)
@@ -33,31 +31,38 @@ export default function AdminOrders() {
   }
 
   useEffect(() => {
-    loadOrders()
-    const interval = setInterval(loadOrders, 30000)
+    fetchOrders()
+    const interval = setInterval(() => {
+      fetchOrders()
+    }, 15000) // Polling a cada 15 segundos
+
     return () => clearInterval(interval)
   }, [])
 
-  async function updateStatus(id, status) {
+  const handleStatusChange = async (orderId, newStatus) => {
     try {
-      await api.put(`/orders/${id}`, { status })
-      setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)))
-      toast.success('Status atualizado!')
-    } catch {
-      toast.error('Erro ao atualizar status')
+      await api.put(`/orders/${orderId}`, { status: newStatus })
+      
+      setOrders(orders.map(order => 
+        order.id === orderId ? { ...order, status: newStatus } : order
+      ))
+      toast.success('Status atualizado com sucesso!')
+    } catch (error) {
+      toast.error('Erro ao atualizar o status do pedido.')
     }
   }
 
-  function toggleSelect(id) {
-    setSelected((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id])
+  const toggleRow = (orderId) => {
+    setExpandedRows(prev => 
+      prev.includes(orderId) 
+        ? prev.filter(id => id !== orderId)
+        : [...prev, orderId]
+    )
   }
 
-  function toggleAll(filteredOrders) {
-    if (selected.length === filteredOrders.length) setSelected([])
-    else setSelected(filteredOrders.map((o) => o.id))
-  }
-
-  const filtered = activeTab === 'all' ? orders : orders.filter((o) => o.status === activeTab)
+  const filteredOrders = orders.filter(order => 
+    activeStatus === 'Todos' ? true : order.status === activeStatus
+  )
 
   return (
     <div className="admin-orders-container p-8">
@@ -68,78 +73,98 @@ export default function AdminOrders() {
         </p>
       </nav>
 
-      {/* Tabs */}
-      <div className="flex justify-center gap-10 mb-10">
-        {TABS.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`admin-tab ${activeTab === tab.id ? 'active' : ''}`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Table Container */}
-      <div className="bg-white rounded-[20px] shadow-sm overflow-hidden min-h-[400px]">
-        {/* Table Header */}
-        <div className="order-table-header">
-          <div className="flex items-center gap-4">
-             <input
-              type="checkbox"
-              checked={filtered.length > 0 && selected.length === filtered.length}
-              onChange={() => toggleAll(filtered)}
-              className="admin-checkbox"
-            />
-            <span className="header-label">PEDIDO <span className="sort-arrows">⇅</span></span>
-          </div>
-          <span className="header-label">NOME DO CLIENTE <span className="sort-arrows">⇅</span></span>
-          <span className="header-label text-right pr-10">STATUS</span>
+      <div className="orders-container">
+        {/* MENU DE ABAS (Filtros) */}
+        <div className="status-tabs">
+          {STATUS_OPTIONS.map(status => (
+            <button 
+              key={status.value}
+              className={`tab-btn ${activeStatus === status.value ? 'active' : ''}`}
+              onClick={() => setActiveStatus(status.value)}
+            >
+              {status.label}
+            </button>
+          ))}
         </div>
 
-        {/* Rows */}
-        <div className="order-rows-container">
-          {loading ? (
-            <div className="loading-state">Carregando pedidos...</div>
-          ) : filtered.length === 0 ? (
-            <div className="empty-state">Nenhum pedido encontrado.</div>
-          ) : (
-            filtered.map((order) => (
-              <div key={order.id} className="order-row">
-                <div className="flex items-center gap-4">
-                  <input
-                    type="checkbox"
-                    checked={selected.includes(order.id)}
-                    onChange={() => toggleSelect(order.id)}
-                    className="admin-checkbox"
-                  />
-                  <span className="order-id">
-                    {String(order.id).slice(0, 6)} {String(order.id).slice(6, 9)}
-                  </span>
-                </div>
-                <span className="customer-name">
-                  {order.user?.name || 'Cliente'}
-                </span>
-                <div className="flex justify-end pr-4">
-                  <div className="custom-select-wrapper">
-                    <select
-                      value={order.status || 'Em preparação'}
-                      onChange={(e) => updateStatus(order.id, e.target.value)}
-                      className="admin-status-select"
-                    >
-                      {STATUS_OPTIONS.map((s) => (
-                        <option key={s.value} value={s.value}>{s.label}</option>
-                      ))}
-                    </select>
-                    <div className="select-arrow">▾</div>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
+        {/* TABELA DE PEDIDOS */}
+        <div className="table-wrapper">
+          <table className="orders-table">
+            <thead>
+              <tr>
+                <th width="50"></th>
+                <th>Pedido</th>
+                <th>Cliente</th>
+                <th>Data do pedido</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan="5" className="text-center py-10 text-gray-500">Carregando pedidos...</td>
+                </tr>
+              ) : filteredOrders.length === 0 ? (
+                <tr>
+                  <td colSpan="5" className="text-center py-10 text-gray-500">Nenhum pedido encontrado.</td>
+                </tr>
+              ) : (
+                filteredOrders.map(order => (
+                  <React.Fragment key={order.id}>
+                    {/* LINHA PRINCIPAL */}
+                    <tr className={`main-row ${expandedRows.includes(order.id) ? 'expanded' : ''}`}>
+                      <td onClick={() => toggleRow(order.id)} className="text-center cursor-pointer text-[#9758a6]">
+                        {expandedRows.includes(order.id) ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </td>
+                      <td className="font-medium text-gray-700">#{order.id.slice(0, 8)}...</td>
+                      <td className="text-gray-600">{order.clientName}</td>
+                      <td className="text-gray-500">{new Date(order.createdAt).toLocaleString('pt-BR')}</td>
+                      <td>
+                        <select 
+                          className="status-select"
+                          value={order.status}
+                          onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                        >
+                          {STATUS_OPTIONS.filter(s => s.value !== 'Todos').map(opt => (
+                            <option key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </option>
+                          ))}
+                        </select>
+                      </td>
+                    </tr>
+
+                    {/* LINHA DE DETALHES (EXPANSÍVEL) */}
+                    {expandedRows.includes(order.id) && (
+                      <tr className="details-row">
+                        <td colSpan="5">
+                          <div className="details-content bg-[#fafafa]">
+                            <div className="details-header text-gray-500 font-bold text-[13px] uppercase">
+                              <span>Quantidade</span>
+                              <span>Produto</span>
+                              <span>Categoria</span>
+                              <span>Imagem</span>
+                            </div>
+                            {order.products.map(product => (
+                              <div className="detail-item" key={product.id}>
+                                <span className="font-bold text-gray-700">{product.quantity}</span>
+                                <span className="text-gray-600">{product.name}</span>
+                                <span className="text-gray-500 italic">{product.category}</span>
+                                <img src={product.url} alt={product.name} className="detail-img" />
+                              </div>
+                            ))}
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   )
 }
+

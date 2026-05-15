@@ -715,7 +715,7 @@ img {
     flex-direction: column;
     padding-top: 30px;
     height: 100vh;
-    position: fixed; /* Mantém a barra fixa */
+    position: fixed;
     left: 0;
     top: 0;
     z-index: 100;
@@ -922,123 +922,138 @@ img {
     background-color: #7d488a;
 }
 
-/* ── Admin Orders Page ── */
-.admin-tab {
-    font-family: 'Poppins', sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    color: #888;
-    background: transparent;
+/* ── Admin Orders Page (Figma DevClub) ── */
+.status-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    border-bottom: 2px solid #EFEFEF;
+    margin-bottom: 30px;
+}
+
+.tab-btn {
+    background: none;
     border: none;
-    padding: 8px 0;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #999;
     cursor: pointer;
-    transition: all 0.3s;
     position: relative;
-    border-bottom: 2px solid transparent;
-}
-
-.admin-tab.active {
-    color: #333;
-    font-weight: bold;
-    border-bottom: 2px solid #ef7d00; /* Laranja da imagem */
-}
-
-/* No CSS antigo as tabs tinham borda redonda, vamos ajustar para o estilo da imagem */
-.admin-tab {
-    padding: 10px 30px;
-    border-radius: 30px;
-    border: 1px solid transparent;
-}
-
-.admin-tab.active {
-    border: 1.5px solid #ef7d00;
-    border-bottom: 1.5px solid #ef7d00;
-    color: #333;
-}
-
-.order-table-header {
-    background-color: #333333;
-    display: grid;
-    grid-template-columns: 200px 1fr 200px;
-    padding: 18px 30px;
-    align-items: center;
-}
-
-.header-label {
-    color: white;
     font-family: 'Poppins', sans-serif;
+    transition: all 0.3s;
+}
+
+.tab-btn.active {
+    color: #9758a6;
     font-weight: bold;
-    font-size: 13px;
-    text-transform: uppercase;
 }
 
-.sort-arrows {
-    opacity: 0.5;
-    margin-left: 5px;
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #9758a6;
+    border-radius: 3px 3px 0 0;
+}
+
+/* TABELA E EXPANSÃO */
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+}
+
+.orders-table th {
+    text-align: left;
+    padding: 20px;
+    color: #666;
+    font-weight: 600;
     font-size: 14px;
+    text-transform: uppercase;
+    background-color: #fcfcfc;
 }
 
-.order-row {
+.main-row td {
+    padding: 20px;
+    border-top: 1px solid #EFEFEF;
+    font-size: 14px;
+    color: #444;
+}
+
+.main-row.expanded {
+    background-color: #f9f9f9;
+}
+
+/* Dropdown de Status Moderno */
+.status-select {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    color: #333;
+    font-size: 13px;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.status-select:focus {
+    border-color: #9758a6;
+    box-shadow: 0 0 0 3px rgba(151, 88, 166, 0.1);
+}
+
+/* O Interior do Accordion */
+.details-row td {
+    padding: 0; 
+    background-color: #FAFAFA;
+}
+
+.details-content {
+    padding: 0;
+    overflow: hidden;
+}
+
+.details-header {
+    background-color: #f1f1f1;
     display: grid;
-    grid-template-columns: 200px 1fr 200px;
-    padding: 18px 30px;
+    grid-template-columns: 150px 2fr 2fr 100px;
+    padding: 12px 40px 12px 60px; /* Aumentei o padding esquerdo para 60px */
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.detail-item {
+    display: grid;
+    grid-template-columns: 150px 2fr 2fr 100px;
     align-items: center;
-    background-color: #f5f5f5;
-    border-bottom: 2px solid #ffffff;
+    padding: 15px 40px 15px 60px; /* Aumentei o padding esquerdo para 60px */
+    border-bottom: 1px solid #eee;
     transition: background 0.2s;
 }
 
-.order-row:hover {
-    background-color: #eeeeee;
+.detail-item:last-child {
+    border-bottom: none;
 }
 
-.order-id {
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-    color: #444;
-    font-weight: 500;
+.detail-item:hover {
+    background-color: #f5f5f5;
 }
 
-.customer-name {
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-    color: #444;
-}
-
-/* Custom Select Styling */
-.custom-select-wrapper {
-    position: relative;
-    width: 170px;
-}
-
-.admin-status-select {
-    width: 100%;
-    appearance: none;
-    -webkit-appearance: none;
+.detail-img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
     background: white;
-    border: 1px solid #cccccc;
     border-radius: 8px;
-    padding: 8px 15px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 13px;
-    color: #666;
-    cursor: pointer;
-    outline: none;
-    transition: border-color 0.3s;
-}
-
-.admin-status-select:focus {
-    border-color: #9758a6;
-}
-
-.select-arrow {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    color: #333;
-    font-size: 12px;
+    padding: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
 .admin-checkbox {
