@@ -1,18 +1,22 @@
 {
   "name": "devburguer-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "API do DevBurger — Express 5, Prisma, JWT, Stripe",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "criar-admin": "node scripts/criar-admin.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "test": "node --test"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "type": "module",
   "dependencies": {
+    "@prisma/client": "^5.22.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
@@ -24,7 +28,6 @@
     "yup": "^1.7.1"
   },
   "devDependencies": {
-    "@prisma/client": "^5.22.0",
     "@types/express": "^5.0.6",
     "@types/node": "^25.7.0",
     "nodemon": "^3.1.14",
